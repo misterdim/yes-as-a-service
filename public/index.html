@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Yes-as-a-Service</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✅</text></svg>">
+  <style>
+    html {
+      background-color: #121212;
+      color: #eaeaea;
+    }
+
+    .container {
+      margin-top: 3rem;
+    }
+
+    .box {
+      background-color: #1f1f1f;
+      color: #f0f0f0;
+      border: 1px solid #333;
+    }
+
+    .title, .label, .radio {
+      color: #f5f5f5;
+    }
+
+    input[type="radio"] {
+      margin-right: 0.5rem;
+    }
+
+    .button.is-primary {
+      background-color: #4c7cfa;
+      border-color: #4c7cfa;
+    }
+
+    .button.is-primary:hover {
+      background-color: #375cd4;
+      border-color: #375cd4;
+    }
+
+    a {
+      color: #7fdbff;
+    }
+
+    .notification.is-danger {
+      background-color: #4a1c1c;
+      color: #fbb;
+    }
+  </style>
+</head>
+<body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title has-text-white">Yes-as-a-Service</h1>
+
+      <div class="field">
+        <label class="label">Choose your mode</label>
+        <div class="control">
+          <label class="radio">
+            <input type="radio" name="mode" value="" checked>
+            Normal
+          </label>
+          <label class="radio">
+            <input type="radio" name="mode" value="fun">
+            Fun
+          </label>
+          <label class="radio">
+            <input type="radio" name="mode" value="corporate">
+            Corporate
+          </label>
+          <label class="radio">
+            <input type="radio" name="mode" value="sarcastic">
+            Sarcastic
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="control">
+          <button id="getYes" class="button is-primary">Get a Yes</button>
+        </div>
+      </div>
+
+      <div id="alertBox" class="notification is-danger is-hidden mt-4"></div>
+      <div id="resultBox" class="box mt-4">Your yes will appear here.</div>
+    </div>
+  </section>
+
+  <script>
+    const resultBox = document.getElementById('resultBox');
+    const alertBox = document.getElementById('alertBox');
+
+    const fetchYes = async () => {
+      alertBox.classList.add('is-hidden');
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+
+      try {
+        const res = await fetch('/yes' + (mode ? `?mode=${mode}` : ''));
+        if (res.status === 429) {
+          alertBox.textContent = 'Whoa there! Too many requests. Try again in a bit.';
+          alertBox.classList.remove('is-hidden');
+          return;
+        }
+        const data = await res.json();
+        resultBox.textContent = data.yes;
+      } catch (err) {
+        alertBox.textContent = 'Something went wrong. Please try again later.';
+        alertBox.classList.remove('is-hidden');
+      }
+    };
+
+    document.getElementById('getYes').addEventListener('click', fetchYes);
+    window.addEventListener('DOMContentLoaded', fetchYes);
+  </script>
+</body>
+</html>

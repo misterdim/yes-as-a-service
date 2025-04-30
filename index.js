@@ -1,4 +1,3 @@
-// index.js
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const fs = require('fs');
@@ -7,21 +6,25 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Load all reason files
-const yesReasons = JSON.parse(fs.readFileSync(path.join(__dirname, 'yes_reasons.json'), 'utf8'));
-const funnyReasons = JSON.parse(fs.readFileSync(path.join(__dirname, 'yes_reasons_funny.json'), 'utf8'));
-const corporateReasons = JSON.parse(fs.readFileSync(path.join(__dirname, 'yes_reasons_corporate.json'), 'utf8'));
-const sarcasticReasons = JSON.parse(fs.readFileSync(path.join(__dirname, 'yes_reasons_sarcastic.json'), 'utf8'));
-
-// Rate limiter: 10 requests per minute per IP
+// Global rate limiter: 10 requests per minute per IP
 const limiter = rateLimit({
-  windowMs: 60 * 1000,
+  windowMs: 10 * 1000,
   max: 10,
   standardHeaders: true,
   legacyHeaders: false
 });
 
-app.use('/yes', limiter);
+// Apply rate limiter to everything
+app.use(limiter);
+
+// Serve static files from /public
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Load reason files
+const yesReasons = JSON.parse(fs.readFileSync(path.join(__dirname, 'yes_reasons.json'), 'utf8'));
+const funnyReasons = JSON.parse(fs.readFileSync(path.join(__dirname, 'yes_reasons_funny.json'), 'utf8'));
+const corporateReasons = JSON.parse(fs.readFileSync(path.join(__dirname, 'yes_reasons_corporate.json'), 'utf8'));
+const sarcasticReasons = JSON.parse(fs.readFileSync(path.join(__dirname, 'yes_reasons_sarcastic.json'), 'utf8'));
 
 app.get('/yes', (req, res) => {
   const mode = req.query.mode;
