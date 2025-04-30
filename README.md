@@ -2,6 +2,8 @@
 
 An Express-based HTTP service that responds with a random positive affirmation, tailored by mood. Great for bots, apps, or existential reassurance.
 
+This was vibe-coded, so I don't care what you do with it.
+
 ## 🎯 Features
 
 - `GET /yes` returns a random “yes” reason.

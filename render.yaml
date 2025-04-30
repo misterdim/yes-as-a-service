@@ -1,0 +1,9 @@
+# render.yaml
+services:
+  - type: web
+    name: yes-as-a-service
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    autoDeploy: true
