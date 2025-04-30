@@ -1,0 +1,23 @@
+{
+  "name": "yes-as-a-service",
+  "version": "0.0.1",
+  "description": "Yes as a service that responds with a reason",
+  "main": "index.ts",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/misterdim/yes-as-a-service.git"
+  },
+  "author": "Dimitrios Touloumis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/misterdim/yes-as-a-service/issues"
+  },
+  "homepage": "https://github.com/misterdim/yes-as-a-service#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.0"
+  }
+}
